@@ -3,7 +3,7 @@
   "description": "A server installer and watch-dog for dayz with built-in Discord and RCon bot",
   "version": "0.0.1-DEV",
   "repository": {
-    "url": "https://github.com/mr-guard/dayz-server-manager"
+    "url": "https://github.com/DevRustic/dayz-server-manager"
   },
   "main": "dist/index.js",
   "scripts": {
