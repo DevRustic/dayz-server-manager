@@ -3,6 +3,7 @@ import {
     Client,
     Message,
     Intents,
+    PresenceStatusData,
 } from 'discord.js';
 import { DiscordMessageHandler } from '../interface/discord-message-handler';
 import { IStatefulService } from '../types/service';
@@ -89,6 +90,7 @@ export class DiscordBot extends IStatefulService {
         );
         this.ready = true;
         this.sendQueuedMessage();
+        this.updateStatusPeriodically();
     }
 
     private sendQueuedMessage(): void {
@@ -160,6 +162,23 @@ export class DiscordBot extends IStatefulService {
                 this.log.log(LogLevel.ERROR, `Error relaying message to channel: ${x.name}`, e);
             }
         }
+    }
+
+    private async getPlayerCount(): Promise<number> {
+        return this.rcon.getPlayers();
+    }
+
+    private async updateStatus(): Promise<void> {
+        if (this.client) {
+            const playerCount = await this.getPlayerCount();
+            this.client.user?.setActivity(`${playerCount} players online`, { type: 'WATCHING' });
+        }
+    }
+    private updateStatusPeriodically(): void {
+        this.updateStatus();
+        setInterval(() => {
+            this.updateStatus();
+        }, 5 * 60 * 1000);
     }
 
 }
