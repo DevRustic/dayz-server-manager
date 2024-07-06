@@ -490,6 +490,18 @@ export class RCON extends IStatefulService {
         ];
     }
 
+    public async getPlayersCount(): Promise<number> {
+        const data = await this.command('players');
+        if (!data) {
+            return 0;
+        }
+        const matchResult = matchRegex(/(\d+)\s+players$/gim, data);
+        if (matchResult && typeof matchResult[0] === 'string') {
+            return parseInt(matchResult[0], 10) || 0;
+        }
+        return 0;
+    }
+
     public async getPlayersRaw(): Promise<string | null> {
         return this.command('players');
     }

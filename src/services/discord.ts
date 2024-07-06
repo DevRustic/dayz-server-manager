@@ -14,6 +14,7 @@ import { LoggerFactory } from './loggerfactory';
 import { EventBus } from '../control/event-bus';
 import { InternalEventTypes } from '../types/events';
 import { DiscordMessage, isDiscordChannelType } from '../types/discord';
+import { RCON } from '../services/rcon';
 
 @singleton()
 @injectable()
@@ -31,6 +32,7 @@ export class DiscordBot extends IStatefulService {
         private manager: Manager,
         private messageHandler: DiscordMessageHandler,
         private eventBus: EventBus,
+        private rcon: RCON,
     ) {
         super(loggerFactory.createLogger('Discord'));
 
@@ -165,7 +167,7 @@ export class DiscordBot extends IStatefulService {
     }
 
     private async getPlayerCount(): Promise<number> {
-        return this.rcon.getPlayers();
+        return this.rcon.getPlayersCount();
     }
 
     private async updateStatus(): Promise<void> {
