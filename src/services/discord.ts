@@ -173,7 +173,7 @@ export class DiscordBot extends IStatefulService {
     private async updateStatus(): Promise<void> {
         if (this.client) {
             const playerCount = await this.getPlayerCount();
-            this.client.user?.setActivity(`${playerCount} players online`, { type: 'WATCHING' });
+            this.client.user?.setActivity(`${playerCount} Players Online`, { type: 'WATCHING' });
         }
     }
     private updateStatusPeriodically(): void {
