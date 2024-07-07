@@ -8,9 +8,13 @@
   "main": "dist/index.js",
   "scripts": {
     "postinstall": "npm run install:ui",
+    "prebuilt:windows": "npm-run-all prebuilt:windows:*",
     "prebuilt:linux": "npm-run-all prebuilt:linux:*",
+    "prebuilt:windows:sqlite": "cd node_modules/better-sqlite3 && npx prebuild-install -d -r node -t v16.0.0 --arch x64 --platform win32 --force",
     "prebuilt:linux:sqlite": "cd node_modules/better-sqlite3 && npx prebuild-install -d -r node -t v16.0.0 --arch x64 --platform linux",
+    "prebuilt:windows:pty": "cd node_modules/@senfo/node-pty && npx prebuild-install -d -r node -t v16.0.0 --arch x64 --platform win32 --force",
     "prebuilt:linux:pty": "cd node_modules/@senfo/node-pty && npx prebuild-install -d -r node -t v16.0.0 --arch x64 --platform linux",
+    "prebuilt:windows:processlist": "cd node_modules/@senfo/process-list && npx prebuild-install -d -r node -t v16.0.0 --arch x64 --platform win32 --force",
     "prebuilt:linux:processlist": "cd node_modules/@senfo/process-list && npx prebuild-install -d -r node -t v16.0.0 --arch x64 --platform linux",
     "install:ui": "cd ui && npm ci",
     "build": "del-cli dist/* && npm run generator && npm run build:tsc && npm run build:ui && npm run build:pbos",
@@ -26,6 +30,9 @@
     "mkdir:exec": "node scripts/mkdir.js exec",
     "start": "npm run build && npm run mkdir:exec && cd exec && node ../dist/index.js",
     "start:fast": "npm run build-backend-only && npm run mkdir:exec && cd exec && node ../dist/index.js",
+    "start:existing:windows": "npm run mkdir:exec && cd exec && bash -c './../build/dayz-server-manager.exe'",
+    "start:packed:windows": "npm run build && npm run pack:windows && npm run start:existing:windows",
+    "start:packed:windows:fast": "npm run build-backend-only && npm run pack:windows && npm run start:existing:windows",
     "lint": "eslint src --ext .ts",
     "test": "npm run generator && nyc --check-coverage --lines 85 --functions 100 mocha",
     "test:watch": "mocha -w --reporter min"
