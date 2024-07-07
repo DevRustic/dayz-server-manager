@@ -26,6 +26,7 @@
     "build:pbo:exp": "node scripts/mkdir.js dist/mods/@DayZServerManagerExpansion/addons && makepbo -P -@=DayZServerManagerExpansion/Scripts watcher_mod/DayZServerManagerExpansion/Scripts dist/mods/@DayZServerManagerExpansion/addons/scripts.pbo",
     "build:pbo:syberia": "node scripts/mkdir.js dist/mods/@DayZServerManagerSyberia/addons && makepbo -P -@=DayZServerManagerSyberia/Scripts watcher_mod/DayZServerManagerSyberia/Scripts dist/mods/@DayZServerManagerSyberia/addons/scripts.pbo",
     "build:pbos": "npm-run-all build:pbo:*",
+    "pack:windows": "del-cli build/dayz-server-manager* && pkg --out-path build -t node16-win-x64 .",
     "pack:linux": "del-cli build/dayz-server-manager* && pkg --out-path build -t node16-linux-x64 .",
     "mkdir:exec": "node scripts/mkdir.js exec",
     "start": "npm run build && npm run mkdir:exec && cd exec && node ../dist/index.js",
