@@ -105,6 +105,7 @@ jobs:
       env:
         npm_config_cache: ./.npm-cache
         PKG_CACHE_PATH: ./.pkg-cache
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
     steps:
     - uses: actions/checkout@v4
