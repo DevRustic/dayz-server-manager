@@ -3,7 +3,6 @@ import {
     Client,
     Message,
     Intents,
-    PresenceStatusData,
 } from 'discord.js';
 import { DiscordMessageHandler } from '../interface/discord-message-handler';
 import { IStatefulService } from '../types/service';
@@ -14,7 +13,7 @@ import { LoggerFactory } from './loggerfactory';
 import { EventBus } from '../control/event-bus';
 import { InternalEventTypes } from '../types/events';
 import { DiscordMessage, isDiscordChannelType } from '../types/discord';
-import { RCON } from '../services/rcon';
+//import { RCON } from '../services/rcon';
 
 @singleton()
 @injectable()
@@ -32,7 +31,7 @@ export class DiscordBot extends IStatefulService {
         private manager: Manager,
         private messageHandler: DiscordMessageHandler,
         private eventBus: EventBus,
-        private rcon: RCON,
+        //private rcon: RCON,
     ) {
         super(loggerFactory.createLogger('Discord'));
 
@@ -92,7 +91,7 @@ export class DiscordBot extends IStatefulService {
         );
         this.ready = true;
         this.sendQueuedMessage();
-        this.updateStatusPeriodically();
+        //this.updateStatusPeriodically();
     }
 
     private sendQueuedMessage(): void {
@@ -166,7 +165,7 @@ export class DiscordBot extends IStatefulService {
         }
     }
 
-    private async getPlayerCount(): Promise<number> {
+    /*private async getPlayerCount(): Promise<number> {
         return this.rcon.getPlayersCount();
     }
 
@@ -181,6 +180,6 @@ export class DiscordBot extends IStatefulService {
         setInterval(() => {
             this.updateStatus();
         }, 5 * 60 * 1000);
-    }
+    }*/
 
 }
