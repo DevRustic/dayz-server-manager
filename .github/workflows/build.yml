@@ -108,8 +108,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      env: 
-        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
     - name: Install build tools
       run: |
@@ -129,10 +127,16 @@ jobs:
         chmod -R 777 . && \
         chown -R 777 "/github/home"
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '14.x'
+    - name: Install NVM and Node.js
+      run: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install 14
+        nvm use 14
+        nvm alias default 14
+        node -v
+        npm -v
     
     - name: download mikeros tools
       # uses: arma-actions/mikero-tools@latest
