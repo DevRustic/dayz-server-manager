@@ -1,6 +1,6 @@
 services:
   dayz:
-    image: ghcr.io/DevRustic/dayz-server-manager:latest
+    image: ghcr.io/devrustic/dayz-server-manager:latest
     ports:
       - "2302-2312:2302-2312"
       - "8766:8766"

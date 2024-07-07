@@ -619,7 +619,7 @@ export class Config {
      * On Windows default is: "DayZServer_x64.exe"
      * On Linux default is: "DayZServer"
      */
-    public serverExe: string = 'DayZServer_x64.exe';
+    public serverExe: string = 'DayZServer';
 
     /**
      * Servers Game Port
