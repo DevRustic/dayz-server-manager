@@ -1,5 +1,5 @@
 import { expect } from '../expect';
-import { ImportMock } from 'ts-mock-imports'
+import { ImportMock } from 'ts-mock-imports';
 import { StubInstance, disableConsole, enableConsole, stubClass } from '../util';
 import * as sinon from 'sinon';
 import * as discordModule from 'discord.js';
@@ -7,13 +7,14 @@ import { DiscordBot } from '../../src/services/discord';
 import { DependencyContainer, Lifecycle, container } from 'tsyringe';
 import { Manager } from '../../src/control/manager';
 import { DiscordMessageHandler } from '../../src/interface/discord-message-handler';
+import * as fs from 'fs';
 
 describe('Test class Discord', () => {
 
     let injector: DependencyContainer;
 
     let manager: StubInstance<Manager>;
-    let messageHandler: StubInstance<DiscordMessageHandler>
+    let messageHandler: StubInstance<DiscordMessageHandler>;
 
     before(() => {
         //disableConsole();
@@ -32,6 +33,8 @@ describe('Test class Discord', () => {
 
         injector.register(Manager, stubClass(Manager), { lifecycle: Lifecycle.Singleton });
         injector.register(DiscordMessageHandler, stubClass(DiscordMessageHandler), { lifecycle: Lifecycle.Singleton });
+
+        injector.register('fs', { useValue: fs });
 
         manager = injector.resolve(Manager) as any;
         messageHandler = injector.resolve(DiscordMessageHandler) as any;
@@ -61,7 +64,7 @@ describe('Test class Discord', () => {
         let onReadyCb;
         listenerStub.withArgs('ready').callsFake((a1, a2) => {
             onReadyCb = a2;
-        });;
+        });
         listenerStub.withArgs('invalidated').callsArg(1);
         listenerStub.withArgs('debug').callsArgWith(1, 'testdebug');
         listenerStub.withArgs('warn').callsArgWith(1, 'testwarn');
@@ -144,7 +147,7 @@ describe('Test class Discord', () => {
             const ret = this.filter2(f);
             ret.array = function () { return this; };
             return ret;
-        }
+        };
         const guilds = {
             cache: {
                 first: () => ({ channels })
@@ -157,7 +160,7 @@ describe('Test class Discord', () => {
             discordChannels: [{
                 mode: 'rcon',
                 channel: 'channel1',
-            },{
+            }, {
                 mode: 'admin',
                 channel: 'channel2',
             }]
