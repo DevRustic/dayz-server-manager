@@ -406,7 +406,7 @@ export class TypesComponent implements OnInit {
 
         // economy core + types
         try {
-            const core = new CoreFileWrapper('cfgEconomyCore.xml');
+            const core = new CoreFileWrapper('cfgeconomycore.xml');
             await core.parse(await this.appCommon.fetchMissionFile(core.file).toPromise());
             this.files.push(core);
 
