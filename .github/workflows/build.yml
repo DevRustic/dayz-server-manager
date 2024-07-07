@@ -17,9 +17,9 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: '16.x'
     
@@ -45,7 +45,7 @@ jobs:
       run: powershell Compress-Archive -Path 'build/*' -DestinationPath 'server-manager.zip'
     
     - name: Archive build artifacts (windows)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: server-manager-windows
         path: ./server-manager.zip
@@ -53,9 +53,9 @@ jobs:
   build-windows-debug:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: '16.x'
     
@@ -93,7 +93,7 @@ jobs:
       run: powershell Compress-Archive -Path 'build/*' -DestinationPath 'server-manager.zip'
     
     - name: Archive build artifacts (windows)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: server-manager-windows-debug
         path: ./server-manager.zip
@@ -107,7 +107,7 @@ jobs:
         PKG_CACHE_PATH: ./.pkg-cache
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Install build tools
       run: |
@@ -128,7 +128,7 @@ jobs:
         chown -R 777 "/github/home"
 
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: '16.x'
     
@@ -160,7 +160,7 @@ jobs:
     - name: Zip Artifacts (ubuntu-18)
       run: zip -r server-manager.zip build/*
     - name: Archive build artifacts (ubuntu-18)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: server-manager-ubuntu-18
         path: ./server-manager.zip
@@ -169,13 +169,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Install build tools
       run: sudo apt-get install -y make python3 python2 build-essential
 
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: '16.x'
     
@@ -199,7 +199,7 @@ jobs:
     - name: Zip Artifacts (ubuntu latest)
       run: zip -r server-manager.zip build/*
     - name: Archive build artifacts (ubuntu latest)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: server-manager-ubuntu-latest
         path: ./server-manager.zip
@@ -215,7 +215,7 @@ jobs:
     - build-ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Download artifacts (ubuntu latest)
       uses: actions/download-artifact@v2
@@ -249,9 +249,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: '16.x'
     
