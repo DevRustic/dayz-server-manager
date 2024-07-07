@@ -8,6 +8,8 @@ import { DependencyContainer, Lifecycle, container } from 'tsyringe';
 import { Manager } from '../../src/control/manager';
 import { DiscordMessageHandler } from '../../src/interface/discord-message-handler';
 import * as fs from 'fs';
+import { RCON } from '../../src/services/rcon';
+
 
 describe('Test class Discord', () => {
 
@@ -35,6 +37,8 @@ describe('Test class Discord', () => {
         injector.register(DiscordMessageHandler, stubClass(DiscordMessageHandler), { lifecycle: Lifecycle.Singleton });
 
         injector.register('fs', { useValue: fs });
+
+        injector.register('rconSocket', {useClass: RCON,});
 
         manager = injector.resolve(Manager) as any;
         messageHandler = injector.resolve(DiscordMessageHandler) as any;
@@ -160,7 +164,7 @@ describe('Test class Discord', () => {
             discordChannels: [{
                 mode: 'rcon',
                 channel: 'channel1',
-            }, {
+            },{
                 mode: 'admin',
                 channel: 'channel2',
             }]
