@@ -762,6 +762,7 @@ export class RCON extends IStatefulService {
                 );
 
                 this.handleMessage(packet.message);
+                this.handleMessageFDCS(packet.message);
                 break;
             }
             default: {
@@ -790,17 +791,20 @@ export class RCON extends IStatefulService {
                 message,
             },
         );
-
+    }
+    
+    private async handleMessageFDCS(message: string): Promise<void> {
         if (message.startsWith('Player')) {
-            var playerCount = this.getPlayersCount();
-            var msg = `${playerCount} Players Online`;
-            
+            const playerCount = await this.getPlayersCount();
+            const msg = `${playerCount} Players Online`;
+    
             this.eventBus.emit(
                 InternalEventTypes.DISCORD_STATUS_REQUEST,
                 msg,
             );
         }
     }
+    
 
     public steam64ToDayZID(steam64Id: string): string {
         if (!steam64Id || steam64Id.length !== 17) return '';

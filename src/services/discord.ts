@@ -51,6 +51,9 @@ export class DiscordBot extends IStatefulService {
                     this.updateStatus('Server Starting');
                 } else if (newState === ServerState.STOPPED) {
                     this.updateStatus('Server Offline');
+                } else {
+                    this.updateStatus('Unable to find server status.');
+                    this.log.log(LogLevel.WARN, `${newState}, ${prevState}`);
                 }
             },
         )
