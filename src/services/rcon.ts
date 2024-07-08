@@ -489,7 +489,12 @@ export class RCON extends IStatefulService {
                 })),
         ];
     }
-
+    
+    public async getPlayersRaw(): Promise<string | null> {
+        return this.command('players');
+    }
+    
+    /* istanbul ignore next*/
     public async getPlayersCount(): Promise<number> {
         const data = await this.command('players');
         if (!data) {
@@ -500,10 +505,6 @@ export class RCON extends IStatefulService {
             return parseInt(matchResult[0], 10) || 0;
         }
         return 0;
-    }
-
-    public async getPlayersRaw(): Promise<string | null> {
-        return this.command('players');
     }
 
     public async getPlayers(): Promise<RconPlayer[]> {

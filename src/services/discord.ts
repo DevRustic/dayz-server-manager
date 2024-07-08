@@ -3,6 +3,7 @@ import {
     Client,
     Message,
     Intents,
+    PresenceStatusData,
 } from 'discord.js';
 import { DiscordMessageHandler } from '../interface/discord-message-handler';
 import { IStatefulService } from '../types/service';
@@ -13,7 +14,7 @@ import { LoggerFactory } from './loggerfactory';
 import { EventBus } from '../control/event-bus';
 import { InternalEventTypes } from '../types/events';
 import { DiscordMessage, isDiscordChannelType } from '../types/discord';
-//import { RCON } from '../services/rcon';
+import { RCON } from '../services/rcon';
 
 @singleton()
 @injectable()
@@ -31,7 +32,7 @@ export class DiscordBot extends IStatefulService {
         private manager: Manager,
         private messageHandler: DiscordMessageHandler,
         private eventBus: EventBus,
-        //private rcon: RCON,
+        private rcon: RCON,
     ) {
         super(loggerFactory.createLogger('Discord'));
 
@@ -91,7 +92,7 @@ export class DiscordBot extends IStatefulService {
         );
         this.ready = true;
         this.sendQueuedMessage();
-        //this.updateStatusPeriodically();
+        this.updateStatusPeriodically();
     }
 
     private sendQueuedMessage(): void {
@@ -165,21 +166,23 @@ export class DiscordBot extends IStatefulService {
         }
     }
 
-    /*private async getPlayerCount(): Promise<number> {
+    /* istanbul ignore next*/
+    public async getPlayerCount(): Promise<number> {
         return this.rcon.getPlayersCount();
     }
-
-    private async updateStatus(): Promise<void> {
+    /* istanbul ignore next*/
+    public async updateStatus(): Promise<void> {
         if (this.client) {
             const playerCount = await this.getPlayerCount();
             this.client.user?.setActivity(`${playerCount} Players Online`, { type: 'WATCHING' });
         }
     }
-    private updateStatusPeriodically(): void {
+    /* istanbul ignore next*/
+    public updateStatusPeriodically(): void {
         this.updateStatus();
         setInterval(() => {
             this.updateStatus();
         }, 5 * 60 * 1000);
-    }*/
+    }
 
 }

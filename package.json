@@ -162,6 +162,7 @@
     "folder-hash": "^4.0.1",
     "fs-extra": "^9.1.0",
     "gamedig": "^3.0.9",
+    "jest": "^29.7.0",
     "jsonschema": "^1.4.0",
     "node-pty": "^0.10.1",
     "node-schedule": "2.0.0",
