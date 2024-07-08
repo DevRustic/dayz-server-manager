@@ -14,7 +14,8 @@ import { LoggerFactory } from './loggerfactory';
 import { EventBus } from '../control/event-bus';
 import { InternalEventTypes } from '../types/events';
 import { DiscordMessage, isDiscordChannelType } from '../types/discord';
-import { RCON } from '../services/rcon';
+import { ServerState } from "../types/monitor";
+
 
 @singleton()
 @injectable()
@@ -32,7 +33,6 @@ export class DiscordBot extends IStatefulService {
         private manager: Manager,
         private messageHandler: DiscordMessageHandler,
         private eventBus: EventBus,
-        private rcon: RCON,
     ) {
         super(loggerFactory.createLogger('Discord'));
 
@@ -40,6 +40,26 @@ export class DiscordBot extends IStatefulService {
             InternalEventTypes.DISCORD_MESSAGE,
             /* istanbul ignore next */ (message: DiscordMessage) => this.sendMessage(message),
         );
+
+        /* istanbul ignore next */
+        this.eventBus.on(
+            InternalEventTypes.MONITOR_STATE_CHANGE,
+             async (newState, prevState) => {
+                if (newState === ServerState.STARTED && prevState === ServerState.STARTING) {
+                    this.updateStatus('Server Started - 0 Players');
+                } else if (newState === ServerState.STARTING) {
+                    this.updateStatus('Server Starting');
+                } else if (newState === ServerState.STOPPED) {
+                    this.updateStatus('Server Offline');
+                }
+            },
+        )
+        
+        /* istanbul ignore next */
+        this.eventBus.on(
+            InternalEventTypes.DISCORD_STATUS_REQUEST,
+            (msg: string) => this.updateStatus(msg),
+        )
     }
 
     public async start(): Promise<void> {
@@ -92,7 +112,6 @@ export class DiscordBot extends IStatefulService {
         );
         this.ready = true;
         this.sendQueuedMessage();
-        this.updateStatusPeriodically();
     }
 
     private sendQueuedMessage(): void {
@@ -166,23 +185,12 @@ export class DiscordBot extends IStatefulService {
         }
     }
 
+
     /* istanbul ignore next*/
-    public async getPlayerCount(): Promise<number> {
-        return this.rcon.getPlayersCount();
-    }
-    /* istanbul ignore next*/
-    public async updateStatus(): Promise<void> {
-        if (this.client) {
-            const playerCount = await this.getPlayerCount();
-            this.client.user?.setActivity(`${playerCount} Players Online`, { type: 'WATCHING' });
+    public async updateStatus(msg: string): Promise<void> {
+        if (this.client && this.ready && msg !== undefined) {
+            this.client.user?.setActivity(`${msg}`, { type: 'CUSTOM' });
         }
-    }
-    /* istanbul ignore next*/
-    public updateStatusPeriodically(): void {
-        this.updateStatus();
-        setInterval(() => {
-            this.updateStatus();
-        }, 5 * 60 * 1000);
     }
 
 }

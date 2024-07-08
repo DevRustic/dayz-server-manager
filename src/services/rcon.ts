@@ -771,6 +771,7 @@ export class RCON extends IStatefulService {
         }
     }
 
+    /* istanbul ignore next */
     private handleMessage(message: string): void {
         if (this.duplicateMessageCache.includes(message)) {
             this.log.log(LogLevel.DEBUG, `duplicate message`, message);
@@ -789,6 +790,16 @@ export class RCON extends IStatefulService {
                 message,
             },
         );
+
+        if (message.startsWith('Player')) {
+            var playerCount = this.getPlayersCount();
+            var msg = `${playerCount} Players Online`;
+            
+            this.eventBus.emit(
+                InternalEventTypes.DISCORD_STATUS_REQUEST,
+                msg,
+            );
+        }
     }
 
     public steam64ToDayZID(steam64Id: string): string {

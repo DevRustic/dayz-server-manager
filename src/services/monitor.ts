@@ -129,7 +129,7 @@ export class Monitor extends IStatefulService {
         if (!this.timers.getTimer('tick')) return;
         this.timers.removeAllTimers();
         this.eventBus.clear(InternalEventTypes.MONITOR_STATE_CHANGE);
-        this.log.log(LogLevel.IMPORTANT, 'Stoping to watch server');
+        this.log.log(LogLevel.IMPORTANT, 'Stopping to watch server');
     }
 
     private async tick(): Promise<void> {

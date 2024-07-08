@@ -108,6 +108,50 @@ export const ROUTES: Routes = [
                 redirectTo: 'rpt',
                 pathMatch: 'full',
             },
+            {
+                path: 'rusticmodsserver',
+                canActivate: [],
+                component: LogMonitorComponent,
+                data: {
+                    title: 'Rustic Mods Script Logs',
+                    logType: LogTypeEnum.RusticModsServer,
+                    breadcrumbs: [
+                        {
+                            text: 'Dashboard',
+                            link: '/dashboard',
+                        },
+                        {
+                            text: 'Logs',
+                        },
+                        {
+                            text: 'Rustic Mods Server Logs',
+                            active: true,
+                        },
+                    ],
+                } as SBRouteData,
+            },
+            {
+                path: 'rusticmodsclient',
+                canActivate: [],
+                component: LogMonitorComponent,
+                data: {
+                    title: 'Rustic Mods Client Logs',
+                    logType: LogTypeEnum.RusticModsClient,
+                    breadcrumbs: [
+                        {
+                            text: 'Dashboard',
+                            link: '/dashboard',
+                        },
+                        {
+                            text: 'Logs',
+                        },
+                        {
+                            text: 'Rustic Mods Client Logs',
+                            active: true,
+                        },
+                    ],
+                } as SBRouteData,
+            },
         ],
     },
 ];

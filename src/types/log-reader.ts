@@ -15,6 +15,8 @@ export enum LogTypeEnum {
     SCRIPT = 'SCRIPT',
     ADM = 'ADM',
     RPT = 'RPT',
+    RusticModsClient = 'RusticModsClient',
+    RusticModsServer = 'RusticModsServer',
 }
 /* eslint-enable no-shadow */
 

@@ -1,5 +1,5 @@
 import { expect } from '../expect';
-import { ImportMock } from 'ts-mock-imports'
+import { ImportMock } from 'ts-mock-imports';
 import { StubInstance, disableConsole, enableConsole, memfs, stubClass } from '../util';
 import * as sinon from 'sinon';
 import * as path from 'path';
@@ -52,6 +52,8 @@ describe('Test class LogReader', () => {
                     'server.rpt': 'test',
                     'server.adm': 'test',
                     'script.log': 'test',
+                    'RusticMods/Logs/RusticMods_Client.txt': 'test',
+                    'RusticMods/Logs/RusticMods_Server.txt': 'test',
                     'test.txt': 'test',
                 },
             },
@@ -71,19 +73,18 @@ describe('Test class LogReader', () => {
             }
         });
 
-        
         manager.getProfilesPath.returns('/testserver/profs');
 
         const logReader = injector.resolve(LogReader);
         logReader.initDelay = 10;
-
 
         await logReader.start();
         eventBus.emit(InternalEventTypes.MONITOR_STATE_CHANGE, ServerState.STARTED, undefined as any);
         await new Promise((r) => setTimeout(r, 100));
         await logReader.stop();
 
-        expect(lineRegister).to.equal(3);
+        // Update the expected count to match the actual number of log files
+        expect(lineRegister).to.equal(5);
     });
 
     it('LogReader-fetchLogs', async () => {

@@ -12,6 +12,8 @@ export class LogsComponent implements OnInit {
     public rptLogs: LogMessage[] = [];
     public admLogs: LogMessage[] = [];
     public scriptLogs: LogMessage[] = [];
+    public rusticmodsclientLogs: LogMessage[] = [];
+    public rusticmodsserverLogs: LogMessage[] = [];
 
     private activeTab$: number = 1;
     public get activeTab(): number {

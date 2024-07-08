@@ -40,6 +40,12 @@ export class LogReader extends IStatefulService {
         RPT: {
             filter: (x) => x.toLowerCase().endsWith('.rpt'),
         },
+        RusticModsClient: {
+            filter: (x) => x.toLowerCase().startsWith('rusticmods_client'),
+        },
+        RusticModsServer: {
+            filter: (x) => x.toLowerCase().startsWith('rusticmods_server'),
+        },
     };
     /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -78,29 +84,36 @@ export class LogReader extends IStatefulService {
 
     private async findLatestFiles(): Promise<void> {
         const profiles = this.manager.getProfilesPath();
-        const files = await this.fs.promises.readdir(profiles);
-
-        const makeFileDescriptor = async (file: string): Promise<FileDescriptor> => {
-            const fullPath = path.join(profiles, file);
+        const rusticModsLogs = path.join(profiles, 'RusticMods', 'Logs');
+        
+        const makeFileDescriptor = async (file: string, basePath: string): Promise<FileDescriptor> => {
+            const fullPath = path.join(basePath, file);
             return {
                 file: fullPath,
                 mtime: (await this.fs.promises.stat(fullPath)).mtime.getTime(),
             };
         };
-
+    
         for (const type of Object.keys(LogTypeEnum)) {
             this.logMap[type as LogType].logFiles = [];
         }
-
-        for (const file of files) {
-            for (const type of Object.keys(LogTypeEnum)) {
-                const logContainer = this.logMap[type as LogType];
+    
+        const scanDirectory = async (directory: string, type: LogType) => {
+            const files = await this.fs.promises.readdir(directory);
+            for (const file of files) {
+                const logContainer = this.logMap[type];
                 if (logContainer.filter(file)) {
-                    logContainer.logFiles.push(await makeFileDescriptor(file));
+                    logContainer.logFiles.push(await makeFileDescriptor(file, directory));
                 }
             }
+        };
+    
+        for (const type of Object.keys(LogTypeEnum)) {
+            const logType = type as LogType;
+            const directory = (logType === 'RusticModsClient' || logType === 'RusticModsServer') ? rusticModsLogs : profiles;
+            await scanDirectory(directory, logType);
         }
-
+    
         for (const type of Object.keys(LogTypeEnum)) {
             this.logMap[type as LogType].logFiles = this.logMap[type as LogType].logFiles
                 .sort(/* istanbul ignore next */ (a, b) => {
@@ -108,6 +121,7 @@ export class LogReader extends IStatefulService {
                 });
         }
     }
+    
 
     private async registerReaders(): Promise<void> {
         await this.findLatestFiles();
