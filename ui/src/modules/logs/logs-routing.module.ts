@@ -104,11 +104,6 @@ export const ROUTES: Routes = [
                 } as SBRouteData,
             },
             {
-                path: '**',
-                redirectTo: 'rpt',
-                pathMatch: 'full',
-            },
-            {
                 path: 'rusticmodsserver',
                 canActivate: [],
                 component: LogMonitorComponent,
@@ -151,6 +146,11 @@ export const ROUTES: Routes = [
                         },
                     ],
                 } as SBRouteData,
+            },
+            {
+                path: '**',
+                redirectTo: 'rpt',
+                pathMatch: 'full',
             },
         ],
     },

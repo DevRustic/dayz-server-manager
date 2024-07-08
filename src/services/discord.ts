@@ -45,7 +45,7 @@ export class DiscordBot extends IStatefulService {
         this.eventBus.on(
             InternalEventTypes.MONITOR_STATE_CHANGE,
              async (newState, prevState) => {
-                if (newState === ServerState.STARTED && prevState === ServerState.STARTING) {
+                if (newState === ServerState.STARTED) {
                     this.updateStatus('Server Started - 0 Players');
                 } else if (newState === ServerState.STARTING) {
                     this.updateStatus('Server Starting');

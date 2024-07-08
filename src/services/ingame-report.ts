@@ -74,16 +74,23 @@ export class IngameReport extends IStatefulService {
             if (this.fs.existsSync(this.tickFilePath)) {
                 const stat = this.fs.statSync(this.tickFilePath);
                 const modified = stat.mtime.getTime();
-
+    
                 // eslint-disable-next-line no-negated-condition
                 if (modified !== this.lastTickTimestamp) {
                     this.lastTickTimestamp = modified;
                     await new Promise((r) => setTimeout(r, this.readTimeout));
-
+    
                     const content = `${this.fs.readFileSync(this.tickFilePath)}`;
-                    const parsed = JSON.parse(content);
-
-                    await this.processIngameReport(parsed);
+    
+                    try {
+                        const parsed = JSON.parse(content);
+                        await this.processIngameReport(parsed);
+                    } catch (jsonError) {
+                        this.log.log(LogLevel.ERROR, `Error parsing JSON content`, {
+                            contentSnippet: content.substring(0, 200), // Log a snippet of the content for debugging
+                            error: jsonError,
+                        });
+                    }
                 } else {
                     this.log.log(LogLevel.DEBUG, `Ingame report file not modified`);
                 }
@@ -94,6 +101,7 @@ export class IngameReport extends IStatefulService {
             this.log.log(LogLevel.ERROR, `Error trying to scan for ingame report file`, e);
         }
     }
+    
 
     public async processIngameReport(report: IngameReportContainer): Promise<void> {
         const timestamp = new Date().valueOf();
