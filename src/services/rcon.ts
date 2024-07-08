@@ -793,8 +793,9 @@ export class RCON extends IStatefulService {
         );
     }
     
+    /* istanbul ignore next */
     private async handleMessageFDCS(message: string): Promise<void> {
-        if (message.startsWith('Player')) {
+        if (message.startsWith('Player' || 'Verified')) {
             const playerCount = await this.getPlayersCount();
             const msg = `${playerCount} Players Online`;
     
@@ -802,6 +803,13 @@ export class RCON extends IStatefulService {
                 InternalEventTypes.DISCORD_STATUS_REQUEST,
                 msg,
             );
+
+            setTimeout(() => {
+                this.eventBus.emit(
+                    InternalEventTypes.DISCORD_STATUS_REQUEST,
+                    msg,
+                );
+            }, 10000);
         }
     }
     

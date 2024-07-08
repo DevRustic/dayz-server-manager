@@ -46,11 +46,13 @@ export class DiscordBot extends IStatefulService {
             InternalEventTypes.MONITOR_STATE_CHANGE,
              async (newState, prevState) => {
                 if (newState === ServerState.STARTED) {
-                    this.updateStatus('Server Started - 0 Players');
+                    this.updateStatus('Server Started - 0 Players Online');
                 } else if (newState === ServerState.STARTING) {
                     this.updateStatus('Server Starting');
                 } else if (newState === ServerState.STOPPED) {
                     this.updateStatus('Server Offline');
+                } else if (newState === ServerState.STOPPING) {
+                    this.updateStatus('Server Stopping');
                 } else {
                     this.updateStatus('Unable to find server status.');
                     this.log.log(LogLevel.WARN, `${newState}, ${prevState}`);
