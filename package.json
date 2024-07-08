@@ -1,7 +1,7 @@
 {
   "name": "dayz-server-manager",
   "description": "A server installer and watch-dog for dayz with built-in Discord and RCon bot",
-  "version": "0.0.1-DEV",
+  "version": "0.0.2",
   "repository": {
     "url": "https://github.com/DevRustic/dayz-server-manager"
   },
