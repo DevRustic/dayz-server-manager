@@ -82,11 +82,11 @@ jobs:
         echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
     
     - name: Create the Badge
-      uses: schneegans/dynamic-badges-action@v1.6.0
+      uses: schneegans/dynamic-badges-action@v1.7.0
       if: contains('refs/heads/master refs/heads/experimental', github.ref)
       with:
         auth: ${{ secrets.GIST_SECRET }}
-        gistID: 442a5cdea03dd79a87b34339a7a16a2c
+        gistID: 140b7e570778165354c56506bfdaaf5b
         filename: dayz-server-manager__master.json
         label: Test Coverage
         message: ${{ env.COVERAGE }}

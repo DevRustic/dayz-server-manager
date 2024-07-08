@@ -1,5 +1,8 @@
 # DayZ Server Manager (Fork for Rustic)
 
+[![GitHub Workflow Status](https://github.com/DevRustic/dayz-server-manager/actions/workflows/build.yml/badge.svg)](https://github.com/DevRustic/dayz-server-manager)
+[![CodeCoverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/devrustic/140b7e570778165354c56506bfdaaf5b/raw/dayz-server-manager__master.json)](https://github.com/DevRustic/dayz-server-manager)
+
 ![Web UI Dashboard](/resources/webui_dashboard_screen.png "Web UI Dashboard")
 
 ![Web UI System](/resources/webui_system_screen.png "Web UI System")
