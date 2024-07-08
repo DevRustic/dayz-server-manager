@@ -1,42 +1,4 @@
-# DayZ Server Manager
-
-
-This tool aims to simplify the process of setting up a DayZ Standalone Server on a Windows Server.  
-The goal was to break down the initial effort to a minimum while providing configuration to nearly all aspects of the server administration process.
-
-Also supports linux server (See [Linux Server Usage](#linux-server))
-
-## Content <hr>
-
-1. [Features](#usage)  
-    1. [Web UI](#feature-webui)
-2. [Requirements](#requirements)
-3. [Usage](#usage)
-4. [Updating](#updating)
-5. [Configuration](#configuration)
-    1. [Change instance ID](#guide-change-instance-id)
-    2. [Adding more admins / moderators](#guide-add-admin)
-    3. [Get the Discord Bot Token](#guide-discord-token)
-    4. [Edit the discord channels](#guide-discord-channels)
-    5. [Adding local mods](#guide-add-workshop-mods)
-    6. [Adding workshop mods](#guide-add-workshop-mods)
-    7. [Change Server Name / Password / Admin Password](#guide-change-server-name-password)
-    8. [Change the server port](#guide-change-server-port)
-    9. [Add scheduled events](#guide-add-events)
-    10. [Add Hooks](#guide-add-hooks)
-6. [Linux Server](#linux-server)
-7. [Steam CMD](#steam-cmd)
-8. [TODOs](#todo)
-9. [Default folder layout](#folder-layout)
-10. [Technical details](#technical-details)
-11. [Security](#security)
-    1. [Discord](#security-discord)
-    2. [Web](#security-web)
-12. [Known Issues and Limitations](#limitations)
-13. [Development](#development)
-14. [Disclaimer](#disclaimer)
-
-
+# DayZ Server Manager (Fork for Rustic)
 
 ![Web UI Dashboard](/resources/webui_dashboard_screen.png "Web UI Dashboard")
 
