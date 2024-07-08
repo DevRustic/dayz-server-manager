@@ -12,90 +12,6 @@ env:
   IMAGE_NAME: devrustic/dayz-server-manager
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '16.x'
-    
-    - name: download mikeros tools
-      uses: arma-actions/mikero-tools@latest
-
-    - name: Install deps
-      run: npm ci
-    - name: Install ui deps
-      run: npm run install:ui
-    
-    - name: Set version
-      if: startsWith(github.ref, 'refs/tags/v')
-      run: npm version ${{ github.ref_name }}
-
-    - name: Build
-      run: npm run build
-
-    - name: Pack (windows)
-      run: npm run pack:windows
-    
-    - name: Zip Artifacts (windows)
-      run: powershell Compress-Archive -Path 'build/*' -DestinationPath 'server-manager.zip'
-    
-    - name: Archive build artifacts (windows)
-      uses: actions/upload-artifact@v4
-      with:
-        name: server-manager-windows
-        path: ./server-manager.zip
-  
-  build-windows-debug:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '16.x'
-    
-    - name: download mikeros tools
-      uses: arma-actions/mikero-tools@latest
-
-    - name: Install deps
-      run: npm ci
-    - name: Install ui deps
-      run: npm run install:ui
-    
-    - name: Set version
-      if: startsWith(github.ref, 'refs/tags/v')
-      run: npm version ${{ github.ref_name }}
-
-    - name: Set mod debug flags
-      run: |
-        echo "#define DayZServerManager" > "watcher_mod/DayZServerManager/Scripts/Common/DayZServerManager/ServerManagerDefines.c"
-        echo "#define DZSM_DEBUG" >> "watcher_mod/DayZServerManager/Scripts/Common/DayZServerManager/ServerManagerDefines.c"
-        echo "#define DZSM_DEBUG_CONTAINER" >> "watcher_mod/DayZServerManager/Scripts/Common/DayZServerManager/ServerManagerDefines.c"
-
-    - name: Set manager debug flags
-      run: |
-        echo "export const dzsmDebugHttp = true;" > "src/config/constants.ts"
-        echo "export const dzsmDebugLogReader = true;" >> "src/config/constants.ts"
-        echo "export const dzsmDebugProcessList = true;" >> "src/config/constants.ts"
-
-    - name: Build
-      run: npm run build
-
-    - name: Pack (windows)
-      run: npm run pack:windows
-    
-    - name: Zip Artifacts (windows)
-      run: powershell Compress-Archive -Path 'build/*' -DestinationPath 'server-manager.zip'
-    
-    - name: Archive build artifacts (windows)
-      uses: actions/upload-artifact@v4
-      with:
-        name: server-manager-windows-debug
-        path: ./server-manager.zip
-
   build-ubuntu-latest:
     runs-on: ubuntu-latest
 
@@ -182,12 +98,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/v')
 
     needs:
     - build-ubuntu-latest
-    - build-windows
-    - build-windows-debug
 
     steps:
     - name: Create Release
@@ -196,8 +110,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
 
