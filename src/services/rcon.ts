@@ -494,18 +494,20 @@ export class RCON extends IStatefulService {
         return this.command('players');
     }
     
-    /* istanbul ignore next*/
+    /* istanbul ignore next */
     public async getPlayersCount(): Promise<number> {
         const data = await this.command('players');
         if (!data) {
             return 0;
         }
-        const matchResult = matchRegex(/(\d+)\s+players$/gim, data);
-        if (matchResult && typeof matchResult[0] === 'string') {
-            return parseInt(matchResult[0], 10) || 0;
+        const regex = /\((\d+) players in total\)/;
+        const match = data.match(regex);
+        if (match && match[1]) {
+            return parseInt(match[1], 10) || 0;
         }
         return 0;
     }
+
 
     public async getPlayers(): Promise<RconPlayer[]> {
 

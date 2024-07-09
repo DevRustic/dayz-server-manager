@@ -117,6 +117,7 @@ export class DiscordBot extends IStatefulService {
         );
         this.ready = true;
         this.sendQueuedMessage();
+        this.updateStatus('Server Starting');
     }
 
     private sendQueuedMessage(): void {
