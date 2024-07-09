@@ -809,7 +809,14 @@ export class RCON extends IStatefulService {
                     InternalEventTypes.DISCORD_STATUS_REQUEST,
                     msg,
                 );
-            }, 10000);
+            }, 15000);
+
+            setTimeout(() => {
+                this.eventBus.emit(
+                    InternalEventTypes.DISCORD_STATUS_REQUEST,
+                    msg,
+                );
+            }, 30000);
         }
     }
     
