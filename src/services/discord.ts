@@ -1,5 +1,7 @@
 import {
     TextChannel,
+    VoiceChannel,
+    Channel,
     Client,
     Message,
     Intents,
@@ -23,6 +25,7 @@ export class DiscordBot extends IStatefulService {
 
     public client: Client | undefined;
     private ready = false;
+    private serverOnline;
 
     private msgQueue: DiscordMessage[] = [];
 
@@ -45,17 +48,28 @@ export class DiscordBot extends IStatefulService {
         this.eventBus.on(
             InternalEventTypes.MONITOR_STATE_CHANGE,
              async (newState, prevState) => {
-                if (newState === ServerState.STARTED) {
-                    this.updateStatus('Server Started - 0 Players Online');
-                } else if (newState === ServerState.STARTING) {
-                    this.updateStatus('Server Starting');
-                } else if (newState === ServerState.STOPPED) {
-                    this.updateStatus('Server Offline');
-                } else if (newState === ServerState.STOPPING) {
-                    this.updateStatus('Server Stopping');
-                } else {
-                    this.updateStatus('Unable to find server status.');
-                    this.log.log(LogLevel.WARN, `${newState}, ${prevState}`);
+                switch (newState) {
+                    case ServerState.STARTED:
+                        this.updateStatus('Server Started - 0 Players Online');
+                        this.serverOnline = true;
+                        break;
+                    case ServerState.STARTING:
+                        this.updateStatus('Server Starting');
+                        this.serverOnline = false;
+                        break;
+                    case ServerState.STOPPED:
+                        this.updateStatus('Server Offline');
+                        this.serverOnline = false;
+                        break;
+                    case ServerState.STOPPING:
+                        this.updateStatus('Server Stopping');
+                        this.serverOnline = false;
+                        break;
+                    default:
+                        this.updateStatus('Unable to find server status.');
+                        this.serverOnline = false;
+                        this.log.log(LogLevel.WARN, `${newState}, ${prevState}`);
+                        break;
                 }
             },
         )
@@ -105,7 +119,8 @@ export class DiscordBot extends IStatefulService {
             this.log.log(LogLevel.WARN, 'Not starting discord bot, login failed', e);
         }
     }
-
+    
+    /* istanbul ignore next*/
     private onReady(): void {
         this.log.log(LogLevel.IMPORTANT, 'Discord Ready!');
         this.log.log(
@@ -118,8 +133,14 @@ export class DiscordBot extends IStatefulService {
         this.ready = true;
         this.sendQueuedMessage();
         this.updateStatus('Server Starting');
+        this.serverOnline = false;
+
+        setInterval(() => {
+            this.setTime();
+        }, 1 * 60 * 1000);
     }
 
+    /* istanbul ignore next*/
     private sendQueuedMessage(): void {
         setTimeout(() => {
             const msgQueue = this.msgQueue;
@@ -191,12 +212,49 @@ export class DiscordBot extends IStatefulService {
         }
     }
 
-
     /* istanbul ignore next*/
     public async updateStatus(msg: string): Promise<void> {
         if (this.client && this.ready && msg !== undefined) {
             this.client.user?.setActivity(`${msg}`, { type: 'CUSTOM' });
         }
+    }
+
+    /* istanbul ignore next*/
+    public minutesUntilNextFourthHour(): number {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinutes = now.getMinutes();
+    
+        const hoursUntilNextFourth = (4 - (currentHour % 4)) % 4;
+        const totalMinutesUntilNextFourth = (hoursUntilNextFourth * 60) - currentMinutes;
+    
+        return hoursUntilNextFourth === 0 ? (4 * 60) - currentMinutes : totalMinutesUntilNextFourth;
+    }
+
+    /* istanbul ignore next*/
+    public async setTime() {
+        if (this.client && this.ready && this.serverOnline) {
+            const RTchannel = await this.client.channels.fetch('1260458188097196032');
+            const IGTChannel = await this.client.channels.fetch('1260458131943723079');
+            var neatTime = this.convertTime(this.minutesUntilNextFourthHour());
+            if (RTchannel) {
+                if (RTchannel.isVoice()) {
+                    RTchannel.setName(`Restart in ${neatTime}`);
+                }
+            }
+            if (IGTChannel) {
+                if (IGTChannel.isVoice()) {
+                    
+                }
+            }
+        }
+    }
+
+    /* istanbul ignore next*/
+    public convertTime(timeInMinutes: number): string {
+        const hours = Math.floor(timeInMinutes / 60);
+        const minutes = timeInMinutes % 60;
+        return `${hours}h ${minutes}m`;
     }
 
 }

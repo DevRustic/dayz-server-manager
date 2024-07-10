@@ -806,6 +806,8 @@ class ServerManagerEntry
 	string position;	
 	string speed;
 	float damage;
+	int hour;
+	int minute;
 }
 
 
@@ -813,6 +815,7 @@ class ServerManagerEntryContainer
 {
 	ref array<ref ServerManagerEntry> players = new array<ref ServerManagerEntry>;
 	ref array<ref ServerManagerEntry> vehicles = new array<ref ServerManagerEntry>;
+	ref array<ref ServerManagerEntry> inGameTime = new array<ref ServerManagerEntry>;
 
 	void ServerManagerEntryContainer()
 	{
@@ -832,6 +835,12 @@ class ServerManagerEntryContainer
 			delete vehicles.Get(i);
 		}
 		delete vehicles;
+
+		for (i = 0; i < inGameTime.Count(); i++)
+		{
+			delete inGameTime.Get(i);
+		}
+		delete inGameTime;
 	}
 
 }
@@ -1043,6 +1052,8 @@ class DayZServerManagerWatcher
 					entry.id = itrCar.GetID();
 					entry.speed = itrCar.GetSpeed().ToString(false);
 					entry.position = itrCar.GetPosition().ToString(false);
+					entry.hour = 0;
+					entry.minute = 0;
 					
 					container.vehicles.Insert(entry);
 				}
@@ -1071,9 +1082,35 @@ class DayZServerManagerWatcher
 				playerEntry.id2 = player.GetIdentity().GetPlainId();
 				playerEntry.speed = player.GetSpeed().ToString(false);
 				playerEntry.position = player.GetPosition().ToString(false);
+				playerEntry.hour = 0;
+				playerEntry.minute = 0;
 
 				container.players.Insert(playerEntry);
 			}
+		}
+
+		container.inGameTime.Clear();
+		array<int> gameTime;
+		int hour, minute;
+		GetGame().GetWorld().GetDate(null, null, null, hour, minute);
+		if (hour && minute)
+		{
+			ref ServerManagerEntry entry = new ServerManagerEntry();
+			
+			entry.entryType = "TIME"
+			entry.category = "INT"
+			
+			entry.name = null;
+			entry.damage = null;
+			entry.type = null;
+			entry.id = null;
+			entry.speed = null;
+			entry.position = null;
+
+			entry.hour = hour;
+			entry.minute = minute;
+			
+			container.inGameTime.Insert(entry);
 		}
 
 		DZSMApiOptions apiOptions = GetDZSMApiOptions();

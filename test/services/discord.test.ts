@@ -9,12 +9,14 @@ import { Manager } from '../../src/control/manager';
 import { DiscordMessageHandler } from '../../src/interface/discord-message-handler';
 import * as fs from 'fs';
 
+
 describe('Test class Discord', () => {
 
     let injector: DependencyContainer;
 
     let manager: StubInstance<Manager>;
     let messageHandler: StubInstance<DiscordMessageHandler>;
+    let clock: sinon.SinonFakeTimers;
 
     before(() => {
         //disableConsole();
@@ -27,6 +29,7 @@ describe('Test class Discord', () => {
     beforeEach(() => {
         // restore mocks
         ImportMock.restore();
+        clock = sinon.useFakeTimers();
 
         container.reset();
         injector = container.createChildContainer();
@@ -39,6 +42,11 @@ describe('Test class Discord', () => {
         manager = injector.resolve(Manager) as any;
         messageHandler = injector.resolve(DiscordMessageHandler) as any;
         (messageHandler as any).PREFIX = '!';
+    });
+
+    afterEach(() => {
+        clock.restore();
+        sinon.restore();
     });
 
     it('Discord-noToken', async () => {

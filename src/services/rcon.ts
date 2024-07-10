@@ -508,7 +508,6 @@ export class RCON extends IStatefulService {
         return 0;
     }
 
-
     public async getPlayers(): Promise<RconPlayer[]> {
 
         const data = await this.getPlayersRaw();
@@ -811,17 +810,9 @@ export class RCON extends IStatefulService {
                     InternalEventTypes.DISCORD_STATUS_REQUEST,
                     msg,
                 );
-            }, 15000);
-
-            setTimeout(() => {
-                this.eventBus.emit(
-                    InternalEventTypes.DISCORD_STATUS_REQUEST,
-                    msg,
-                );
             }, 30000);
         }
-    }
-    
+    }    
 
     public steam64ToDayZID(steam64Id: string): string {
         if (!steam64Id || steam64Id.length !== 17) return '';
