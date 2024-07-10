@@ -30,7 +30,7 @@ import { IngameREST } from '../interface/ingame-rest';
 import { SyberiaCompat } from '../services/syberia-compat';
 import { DiscordEventConverter } from '../services/discord-event-converter';
 import { ConfigFileHelper } from '../config/config-file-helper';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @singleton()
 @registry([
