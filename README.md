@@ -1,5 +1,8 @@
 # DayZ Server Manager (Fork for Rustic)
 
+# WARNING:
+## This is a very much-in-progress and unstable build of mr-guard's dayz-server-manager. If you want to use it, it's at your own risk. One second you may be fine, the next, you won't.
+
 [![GitHub Workflow Status](https://github.com/DevRustic/dayz-server-manager/actions/workflows/build.yml/badge.svg)](https://github.com/DevRustic/dayz-server-manager)
 [![CodeCoverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/devrustic/140b7e570778165354c56506bfdaaf5b/raw/dayz-server-manager__master.json)](https://github.com/DevRustic/dayz-server-manager)
 
