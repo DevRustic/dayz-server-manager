@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserLevel } from '../../app-common/models';
+import * as bcrypt from 'bcrypt';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -47,6 +48,7 @@ export class AuthService {
 
     public async login(user: string, password: string, remember?: boolean): Promise<void> {
         // eslint-disable-next-line no-undef
+        password = await bcrypt.hash(password, 10);
         const auth = `Basic ${btoa(`${user}:${password}`)}`;
         await this.validateLogin(auth, remember);
     }

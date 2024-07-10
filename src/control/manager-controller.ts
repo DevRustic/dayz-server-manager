@@ -30,6 +30,7 @@ import { IngameREST } from '../interface/ingame-rest';
 import { SyberiaCompat } from '../services/syberia-compat';
 import { DiscordEventConverter } from '../services/discord-event-converter';
 import { ConfigFileHelper } from '../config/config-file-helper';
+import * as bcrypt from 'bcrypt';
 
 @singleton()
 @registry([
@@ -257,6 +258,14 @@ export class ManagerController {
         } catch (e) {
             this.log.log(LogLevel.ERROR, `Setup failed: ${e?.message}`, e);
             process['origExit'](1);
+        }
+
+        try {
+            for (const user of (this.manager.config?.admins ?? [])) {
+                user.password = await bcrypt.hash(user.password, 10);
+            }
+        } catch (e) {
+            this.log.log(LogLevel.ERROR, `Failed to hash passwords. Unknown Error.`, e);
         }
 
         this.working = false;

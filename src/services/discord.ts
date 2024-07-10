@@ -239,12 +239,12 @@ export class DiscordBot extends IStatefulService {
             var neatTime = this.convertTime(this.minutesUntilNextFourthHour());
             if (RTchannel) {
                 if (RTchannel.isVoice()) {
-                    RTchannel.setName(`Restart in ${neatTime}`);
+                    RTchannel.setName(`Restart - ${neatTime}`);
                 }
             }
             if (IGTChannel) {
                 if (IGTChannel.isVoice()) {
-                    
+                    //use api instead of shitty dzsm tick file
                 }
             }
         }
